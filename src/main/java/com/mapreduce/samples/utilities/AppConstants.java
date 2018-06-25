@@ -1,5 +1,9 @@
 package com.mapreduce.samples.utilities;
 
+/**
+ * @author Amit kumar
+ * @date: 25/06/2018
+ */
 public class AppConstants {
 	
 	public static String TIMESTAMP="timestamp";

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mapreduce.samples.utilities.AppConstants;
+import com.mapreduce.samples.utilities.hiveUtil;
 
 
 /**
@@ -54,7 +55,8 @@ public class HiveMapper extends Mapper<WritableComparable, DefaultHCatRecord,Tex
 		try{
 			if(value!=null){
 				
-				LinkedHashMap<String,Object> colVal = hiveCols(value);
+				hiveUtil hiveUtil = new hiveUtil();
+				LinkedHashMap<String,Object> colVal = hiveUtil.hiveCols(value,schema);
 				//there are 2 ways to read value from hive putting in map as objects or directly using schema both show as below:
 				
 				//direct using schema and value
@@ -113,33 +115,5 @@ public class HiveMapper extends Mapper<WritableComparable, DefaultHCatRecord,Tex
 
 
 	}
-	public LinkedHashMap<String,Object> hiveCols(DefaultHCatRecord value) throws Exception{
-
-		LinkedHashMap<String,Object> colValMap=new LinkedHashMap<String,Object>();
-		int colsize=schema.getFields().size();
-		for(int i=0;i<colsize;i++){
-			if(AppConstants.TIMESTAMP.equalsIgnoreCase(schema.get(i).getTypeString())){
-				if(value.get(i)==null){
-					colValMap.put(schema.get(i).getName(), AppConstants.NOT_AVAILABLE);
-				}else{
-					colValMap.put(schema.get(i).getName(), ((java.sql.Timestamp)value.get(i)).getTime());
-				}
-
-			}else if(AppConstants.DATE.equalsIgnoreCase(schema.get(i).getTypeString())){
-				if(value.get(i)==null){
-					colValMap.put(schema.get(i).getName(), AppConstants.NOT_AVAILABLE);
-				}else{
-					colValMap.put(schema.get(i).getName(), ((java.sql.Date)value.get(i)).getTime());
-				}
-
-			}else{
-				colValMap.put(schema.get(i).getName(),value.get(i));
-			}
-
-		}
-
-		return colValMap;
-
-	}
-
+	
 }
