@@ -1,4 +1,4 @@
-package com.mapreduce.samples;
+package com.mapreduce.samples.hive;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -16,6 +16,8 @@ import org.apache.hive.hcatalog.data.schema.HCatSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mapreduce.samples.utilities.AppConstants;
+
 /**
  * @author Amit kumar
  * date:25/06/2018
@@ -25,11 +27,6 @@ import org.slf4j.LoggerFactory;
 public class HiveReducer extends Reducer<Text,Text,NullWritable,HCatRecord> {
 
 	public static Logger logger = LoggerFactory.getLogger(HiveReducer.class.getName());
-	String TIMESTAMP="timestamp";
-	String DATE="date";
-	String MAP_DELIMITER="^";
-	String MAP_SPLITTER="\\^";
-	String NOT_AVAILABLE="N/A";
 	HCatSchema schema = null;
 	String outputDb=null;
 	String outputTable=null;
@@ -77,7 +74,7 @@ public class HiveReducer extends Reducer<Text,Text,NullWritable,HCatRecord> {
 					Text record = itr.next();
 					if(record!=null){
 
-						String val[]=record.toString().replace("^"+"$", "").split(MAP_SPLITTER,-1);
+						String val[]=record.toString().replace("^"+"$", "").split(AppConstants.MAP_SPLITTER,-1);
 						if(val.length==13){
 							first_Name = val[0];
 							middle_name = val[1];
@@ -164,12 +161,12 @@ public class HiveReducer extends Reducer<Text,Text,NullWritable,HCatRecord> {
 				}
 
 				record.set(11,amount.lastKey());
-				if(!(NOT_AVAILABLE).equalsIgnoreCase(dob)){
+				if(!(AppConstants.NOT_AVAILABLE).equalsIgnoreCase(dob)){
 					record.set(12, new java.sql.Date(Long.parseLong(dob)));
 				}else{
 					record.set(12, null);
 				}
-				if(!(NOT_AVAILABLE).equalsIgnoreCase(last_update)){
+				if(!(AppConstants.NOT_AVAILABLE).equalsIgnoreCase(last_update)){
 					record.set(13, new java.sql.Timestamp(Long.parseLong(last_update)));
 				}else{
 					record.set(13, null);

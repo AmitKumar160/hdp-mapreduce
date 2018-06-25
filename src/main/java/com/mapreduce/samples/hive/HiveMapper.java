@@ -1,4 +1,4 @@
-package com.mapreduce.samples;
+package com.mapreduce.samples.hive;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -13,6 +13,8 @@ import org.apache.hive.hcatalog.mapreduce.HCatBaseInputFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mapreduce.samples.utilities.AppConstants;
+
 
 /**
  * @author Amit kumar
@@ -24,10 +26,6 @@ public class HiveMapper extends Mapper<WritableComparable, DefaultHCatRecord,Tex
 
 	private static Logger logger = LoggerFactory.getLogger(HiveMapper.class.getName());
 
-	String TIMESTAMP="timestamp";
-	String DATE="date";
-	String MAP_DELIMITER="^";
-	String NOT_AVAILABLE="N/A";
 	HCatSchema schema = null;
 	String inputDb=null;
 	String inputTable=null;
@@ -79,29 +77,29 @@ public class HiveMapper extends Mapper<WritableComparable, DefaultHCatRecord,Tex
 				
 				StringBuffer mapVal= new StringBuffer();
 				mapVal.append(first_Name);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(middle_name);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(last_Name);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(title);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(first_line_address);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(second_line_address);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(city);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(state);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(postcode);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(country);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(account_balance);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(dob);
-				mapVal.append(MAP_DELIMITER);
+				mapVal.append(AppConstants.MAP_DELIMITER);
 				mapVal.append(last_update);
 				
 				//grouping values on basis of keys(UID)
@@ -120,16 +118,16 @@ public class HiveMapper extends Mapper<WritableComparable, DefaultHCatRecord,Tex
 		LinkedHashMap<String,Object> colValMap=new LinkedHashMap<String,Object>();
 		int colsize=schema.getFields().size();
 		for(int i=0;i<colsize;i++){
-			if(TIMESTAMP.equalsIgnoreCase(schema.get(i).getTypeString())){
+			if(AppConstants.TIMESTAMP.equalsIgnoreCase(schema.get(i).getTypeString())){
 				if(value.get(i)==null){
-					colValMap.put(schema.get(i).getName(), NOT_AVAILABLE);
+					colValMap.put(schema.get(i).getName(), AppConstants.NOT_AVAILABLE);
 				}else{
 					colValMap.put(schema.get(i).getName(), ((java.sql.Timestamp)value.get(i)).getTime());
 				}
 
-			}else if(DATE.equalsIgnoreCase(schema.get(i).getTypeString())){
+			}else if(AppConstants.DATE.equalsIgnoreCase(schema.get(i).getTypeString())){
 				if(value.get(i)==null){
-					colValMap.put(schema.get(i).getName(), NOT_AVAILABLE);
+					colValMap.put(schema.get(i).getName(), AppConstants.NOT_AVAILABLE);
 				}else{
 					colValMap.put(schema.get(i).getName(), ((java.sql.Date)value.get(i)).getTime());
 				}

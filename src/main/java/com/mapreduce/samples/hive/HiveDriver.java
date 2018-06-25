@@ -1,4 +1,4 @@
-package com.mapreduce.samples;
+package com.mapreduce.samples.hive;
 
 /**
  * @author Amit kumar
