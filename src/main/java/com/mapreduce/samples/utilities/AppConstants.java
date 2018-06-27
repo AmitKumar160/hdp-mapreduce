@@ -11,5 +11,6 @@ public class AppConstants {
 	public static String MAP_DELIMITER="^";
 	public static String MAP_SPLITTER="\\^";
 	public static String NOT_AVAILABLE="N/A";
+	public static String HBASE_CONCAT=":";
 
 }

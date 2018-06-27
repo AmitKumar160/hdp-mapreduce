@@ -76,28 +76,44 @@ public class hbaseUtil {
 
 	}
 
-	public void putData(Connection connection, String tableName, 
-			String cf, HashMap<String,HashMap<String,String>> map) throws IOException{
-		
+	public void putRowData(Connection connection, String tableName, 
+			String cf, HashMap<String,String> map,String rowkey) throws IOException{
+
 		try{
 			Table table= connection.getTable(TableName.valueOf(tableName));
-			for(Map.Entry<String,HashMap<String,String>> entry: map.entrySet()){
-				String rowkey=entry.getKey();
-				HashMap<String,String> innerMap=entry.getValue();
-				for(Map.Entry<String, String> ent:innerMap.entrySet()){
-					String Qualifier=ent.getKey();
-					String Value=ent.getValue();
-					Put put = new Put(Bytes.toBytes(rowkey));
-					put.addColumn(Bytes.toBytes(cf), Bytes.toBytes(Qualifier), Bytes.toBytes(Value));
-					table.put(put);
-				}
-				
+			for(Map.Entry<String,String> entry: map.entrySet()){
+				String Qualifier=entry.getKey();
+				String Value=entry.getValue();
+				Put put = new Put(Bytes.toBytes(rowkey));
+				put.addColumn(Bytes.toBytes(cf), Bytes.toBytes(Qualifier), Bytes.toBytes(Value));
+				table.put(put);
 			}
-			
+
+
 		}catch(Exception e){
 			logger.info("error while putting data into hbase:"+e);
 		}
-		
-		
+
+
 	}
+	
+	public Put putData(String cf, HashMap<String,String> map,String rowkey) throws IOException{
+
+		Put put = null;
+		try{
+			for(Map.Entry<String,String> entry: map.entrySet()){
+				String Qualifier=entry.getKey();
+				String Value=entry.getValue();
+				put = new Put(Bytes.toBytes(rowkey));
+				put.addColumn(Bytes.toBytes(cf), Bytes.toBytes(Qualifier), Bytes.toBytes(Value));
+			}
+
+
+		}catch(Exception e){
+			logger.info("error while putting data into hbase:"+e);
+		}
+
+		return put;
+	}
+
 }
